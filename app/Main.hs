@@ -2,7 +2,9 @@
 module Main where
 
 import Web.Scotty
+import Web.Scotty.TLS
 
 main :: IO ()
-main = scotty 3000 $
-  get "/auth" (do json ("Hello, World !" :: String))
+main = scottyTLS 3000 "private.key" "certificate.crt" $ do
+  get "/auth" $ do
+    json ("Hello, World !" :: String)
