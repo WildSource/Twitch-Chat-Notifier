@@ -1,18 +1,20 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Main where
 
+import Env
 import Control.Concurrent
 import Control.Monad
+import System.Environment
 import Web.Browser
 import Web.Scotty
 import Web.Scotty.TLS
 
 authUrl :: String
 authUrl = "https://id.twitch.tv/oauth2/authorize"
-          ++ "?response_type=token"
-          ++ "&client_id="
-          ++ "&redirect_uri=https://localhost:3000/auth"
-          ++ "&scope=channel%3Abot"
+          ++ "?response_type=" <> getEnv "RESPONSE_TYPE"
+          ++ "&client_id=" <> getEnv "CLIENT_ID"
+          ++ "&redirect_uri=" <> getEnv "REDIRECT_URI"
+          ++ "&scope=" <> getEnv "SCOPE"
 
 authenticationEndpoint :: IO ()
 authenticationEndpoint = do
@@ -36,6 +38,7 @@ wait n = putStrLn "Loading ..."
 
 main :: IO ()
 main = do
+  loadEnvFile "twitch-chat-notifier.env"
   _ <- forkIO authenticationEndpoint
   threadDelay $ secondsToMicroseconds 3
   authenticateUser

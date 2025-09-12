@@ -72,7 +72,8 @@ executable twitch-chat-notifier
     build-depends:    base ^>=4.18.3.0,
                       scotty ^>=0.22,
                       scotty-tls ^>=0.6.0,
-                      open-browser ^>=0.4.0.0
+                      open-browser ^>=0.4.0.0,
+                      env
 
     -- Directories containing source files.
     hs-source-dirs:   app

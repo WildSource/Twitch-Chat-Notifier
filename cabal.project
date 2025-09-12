@@ -1,0 +1,6 @@
+packages: .
+
+source-repository-package
+  type: git
+  location: https://github.com/WildSource/env
+  tag: v1.0.0.1
