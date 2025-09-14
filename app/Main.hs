@@ -13,16 +13,23 @@ authUrl :: IO String
 authUrl = do
   let (uri, params') = deconstruct authParams
   values <- traverse getEnv keys
-  let uriParams = cons [p ++ v | p <- params', v <- values]
-  pure $ uri ++ uriParams
+  
+  let uriParams = cons params' values
+
+  pure $ uri ++ (cons' uriParams)
+
   where
     deconstruct :: [String] -> (String, [String])
     deconstruct [] = ("", [])
     deconstruct l = (head l, tail l)
 
-    cons :: [String] -> String
-    cons [] = []
-    cons (x:xs) = x ++ cons xs
+    cons :: [String] -> [String] -> [String]
+    cons [] [] = []
+    cons (x:xs) (z:zs) = (x ++ z) : cons xs zs
+
+    cons' :: [String] -> String
+    cons' [] = ""
+    cons' (x:xs) = x ++ cons' xs
     
     authParams :: [String]
     authParams = [ "https://id.twitch.tv/oauth2/authorize"
@@ -41,6 +48,7 @@ authUrl = do
 
 authenticationEndpoint :: IO ()
 authenticationEndpoint = do
+    putStrLn "Starting Server ..."
     scottyTLS 3000 "private.key" "certificate.crt" $ do
       get "/authentication" $ do
         json ("Hello, World !" :: String)
