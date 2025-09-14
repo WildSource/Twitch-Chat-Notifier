@@ -42,7 +42,7 @@ authUrl = do
 authenticationEndpoint :: IO ()
 authenticationEndpoint = do
     scottyTLS 3000 "private.key" "certificate.crt" $ do
-      get "/auth" $ do
+      get "/authentication" $ do
         json ("Hello, World !" :: String)
 
 authenticateUser :: IO ()
