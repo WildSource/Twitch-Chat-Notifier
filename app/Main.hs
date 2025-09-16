@@ -46,13 +46,6 @@ authUrl = do
            , "SCOPE"
            ]
 
-authenticationEndpoint :: IO ()
-authenticationEndpoint = do
-    putStrLn "Starting Server ..."
-    scottyTLS 3000 "private.key" "certificate.crt" $ do
-      get "/authentication" $ do
-        json ("Hello, World !" :: String)
-
 authenticateUser :: IO ()
 authenticateUser = do
   url <- authUrl
@@ -71,9 +64,6 @@ wait n = putStrLn "Loading ..."
 main :: IO ()
 main = do
   loadEnvFile "twitch-chat-notifier.env"
-  
-  _ <- forkIO authenticationEndpoint
-  wait 3
   
   authenticateUser
   
